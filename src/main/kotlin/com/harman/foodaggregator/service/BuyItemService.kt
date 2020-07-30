@@ -15,6 +15,10 @@ import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 import com.harman.foodaggregator.model.Fruit as Fruit
 
+/**
+ * This is the service of Buy Item
+ *
+ */
 @Service
 class BuyItemService {
 
@@ -25,6 +29,12 @@ class BuyItemService {
     private val vegetablesContainer = HashSet<Vegetable>()
     private val grainsContainer = HashSet<Grain>()
 
+    /**
+     * It accepts item name (Food) as parameter and returns the appropriate item from Supplier API
+     *
+     * @param name as String
+     * @return List of Items
+     */
     fun getItems(name: String): List<Any> {
 
         val itemList = ArrayList<Any>()
@@ -74,6 +84,16 @@ class BuyItemService {
         return itemList
     }
 
+
+    /**
+     * It accepts item name (Food) as parameter and returns the appropriate item from Supplier API
+     *
+     * @param item as String
+     * @param price as Double
+     * @param quantity as Int
+     *
+     * @return List of Items
+     */
     fun getItemByQtyPrice(item: String, quantity: Int, price: Double): List<Any> {
         val itemSet = HashSet<Any>()
 
@@ -99,7 +119,7 @@ class BuyItemService {
         if (itemSet.size == 0) {
             itemSet.add("NOT_FOUND")
         }
-        var lst = ArrayList<Any>()
+        val lst = ArrayList<Any>()
         lst.addAll(itemSet)
 
 
@@ -108,6 +128,9 @@ class BuyItemService {
 
     }
 
+    /**
+     * It initializes the data into container from supplier API
+     */
     private fun initializeDataIntoSupplierFromApi() {
         // Call Fruit Supplier API
         val fruitResponse = restTemplate.getForEntity("https://run.mocky.io/v3/c51441de-5c1a-4dc2-a44e-aab4f619926b", Array<Fruit>::class.java)
@@ -135,6 +158,10 @@ class BuyItemService {
             }
     }
 
+    /**
+     * It accepts the item name, quantity, price and filters the item from container and return appropriate list of item
+     *
+     */
     private fun getItemFromContainter(item: String, quantity: Int, price: Double): List<Any> {
         val itemList = ArrayList<Any>()
         for (fruit in fruitsContainer) {
@@ -159,22 +186,37 @@ class BuyItemService {
 
     }
 
+    /**
+     * It accepts item name (Food) as parameter and returns the appropriate item fastest
+     *
+     * @param name as String
+     * @return List of Items
+     */
     fun getFastBuyItems(name: String): List<Any> {
 
-        var itemList = ArrayList<Any>()
+        val itemList = ArrayList<Any>()
 
-        var fruit = getFruitsItem(name)
-        var veg = getVegetablesItem(name)
-        var grain = getGrainsItem(name)
+        val fruit = getFruitsItem(name)
+        val veg = getVegetablesItem(name)
+        val grain = getGrainsItem(name)
 
         itemList.addAll(fruit.get())
         itemList.addAll(veg.get())
         itemList.addAll(grain.get())
+        if (itemList.size == 0) {
+            //   println(itemList)
+            itemList.add("NOT_FOUND")
+        }
         println(itemList)
 
         return itemList
     }
 
+    /**
+     * It is a Asynchronous method to get fruit item from Fruit Supplier
+     *
+     * @param name as String
+     */
     @Async
     private fun getFruitsItem(name: String): CompletableFuture<List<Any>> {
         val itemList = ArrayList<Any>()
@@ -194,7 +236,11 @@ class BuyItemService {
         return CompletableFuture.completedFuture(itemList)
     }
 
-
+    /**
+     * It is a Asynchronous method to get vegetable item from Vegetable Supplier
+     *
+     * @param name as String
+     */
     @Async
     private fun getVegetablesItem(name: String): CompletableFuture<List<Any>> {
         val itemList = ArrayList<Any>()
@@ -215,6 +261,11 @@ class BuyItemService {
         return CompletableFuture.completedFuture(itemList)
     }
 
+    /**
+     * It is a Asynchronous method to get grain item from Grain Supplier
+     *
+     * @param name as String
+     */
     @Async
     private fun getGrainsItem(name: String): CompletableFuture<List<Any>> {
         val itemList = ArrayList<Any>()

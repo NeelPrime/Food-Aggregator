@@ -7,7 +7,7 @@ import org.springframework.boot.runApplication
 class FoodAggregatorApplication
 
 fun main(args: Array<String>) {
-    println("Hello before")
+
     runApplication<FoodAggregatorApplication>(*args)
-    println("Hello after")
+    println("Application is successfully started...")
 }

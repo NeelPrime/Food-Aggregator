@@ -7,10 +7,17 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import java.util.concurrent.Executor
 
 
+/**
+ * Configuration class of Asynchronous
+ */
 @Configuration
 @EnableAsync
 class AsyncConfiguration {
 
+    /**
+     * It returns ThreadPoolTaskExecutor to run thread parallel
+     *
+     */
     @Bean
     fun asyncExecutor():Executor {
         val executor=ThreadPoolTaskExecutor()
